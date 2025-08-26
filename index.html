@@ -105,24 +105,45 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+        .rasi-image {
+            width: 4rem; /* 64px */
+            height: 4rem; /* 64px */
+            object-fit: cover;
+            border-radius: 9999px; /* rounded-full */
+            border: 1px solid #a78bfa; /* border-indigo-300 */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem; /* Large emoji size */
+            line-height: 1;
+            background-color: #f0f2f5;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <header class="bg-indigo-600 text-white p-4 shadow-md">
         <div class="container flex justify-between items-center">
             <h1 class="text-3xl font-bold tracking-tight">Daily Rasi Phalalu</h1>
-            <button id="adminLoginButton" class="btn btn-secondary flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                </svg>
-                Admin Login
-            </button>
-            <button id="adminLogoutButton" class="btn btn-secondary hidden flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10 0a1 1 0 00-1 1v4h3a1 1 0 100-2h-3V4a1 1 0 00-1-1zM7 9a1 1 0 011-1h6a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
-                </svg>
-                Admin Logout
-            </button>
+            <nav class="flex items-center space-x-4">
+                <a href="#" id="homeButton" class="text-white hover:text-indigo-200 font-medium flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <button id="adminLoginButton" class="btn btn-secondary flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    Admin Login
+                </button>
+                <button id="adminLogoutButton" class="btn btn-secondary hidden flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10 0a1 1 0 00-1 1v4h3a1 1 0 100-2h-3V4a1 1 0 00-1-1zM7 9a1 1 0 011-1h6a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Admin Logout
+                </button>
+            </nav>
         </div>
     </header>
 
@@ -140,6 +161,30 @@
             </div>
         </section>
 
+        <!-- Initial Admin Setup Modal -->
+        <section id="adminSetupSection" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Set Up Admin Credentials</h2>
+                <p class="text-gray-600 mb-4 text-center">This is a one-time setup. Please create your admin username and password.</p>
+                <form id="setupAdminForm">
+                    <div class="mb-4">
+                        <label for="setupUsername" class="admin-form label">Username:</label>
+                        <input type="text" id="setupUsername" name="setupUsername" class="admin-form input" required autocomplete="off">
+                    </div>
+                    <div class="mb-4">
+                        <label for="setupPassword" class="admin-form label">Password:</label>
+                        <input type="password" id="setupPassword" name="setupPassword" class="admin-form input" required autocomplete="new-password">
+                    </div>
+                    <div class="mb-6">
+                        <label for="confirmSetupPassword" class="admin-form label">Confirm Password:</label>
+                        <input type="password" id="confirmSetupPassword" name="confirmSetupPassword" class="admin-form input" required autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Set Credentials</button>
+                    <p id="setupError" class="text-red-500 text-center mt-4 hidden"></p>
+                </form>
+            </div>
+        </section>
+
         <!-- Admin Login Modal/Section -->
         <section id="adminLoginSection" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center hidden z-50">
             <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
@@ -151,7 +196,7 @@
                     </div>
                     <div class="mb-6">
                         <label for="password" class="admin-form label">Password:</label>
-                        <input type="password" id="password" name="password" class="admin-form input" required autocomplete="off">
+                        <input type="password" id="password" name="password" class="admin-form input" required autocomplete="current-password">
                     </div>
                     <button type="submit" class="btn btn-primary w-full">Login</button>
                     <button type="button" id="cancelLogin" class="btn btn-secondary w-full mt-4">Cancel</button>
@@ -177,6 +222,29 @@
                 <button id="saveRasiButton" class="btn btn-primary">Save Rasi Phalalu</button>
             </div>
             <p id="adminMessage" class="text-center mt-4 hidden"></p>
+
+            <hr class="my-8 border-gray-200">
+
+            <!-- Change Password Section -->
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Change Admin Password</h2>
+            <form id="changePasswordForm">
+                <div class="mb-4">
+                    <label for="currentPassword" class="admin-form label">Current Password:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" class="admin-form input" required autocomplete="current-password">
+                </div>
+                <div class="mb-4">
+                    <label for="newPassword" class="admin-form label">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" class="admin-form input" required autocomplete="new-password">
+                </div>
+                <div class="mb-6">
+                    <label for="confirmNewPassword" class="admin-form label">Confirm New Password:</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="admin-form input" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Change Password</button>
+                <p id="changePasswordError" class="text-red-500 text-center mt-4 hidden"></p>
+                <p id="changePasswordSuccess" class="text-green-500 text-center mt-4 hidden"></p>
+            </form>
+
         </section>
     </main>
 
@@ -188,11 +256,8 @@
     </div>
 
     <script>
-        // Admin credentials (WARNING: These are visible in client-side code and are NOT secure)
-        const ADMIN_USERNAME = 'admin';
-        const ADMIN_PASSWORD = 'papaadmin';
-
         // DOM Elements
+        const homeButton = document.getElementById('homeButton');
         const adminLoginButton = document.getElementById('adminLoginButton');
         const adminLogoutButton = document.getElementById('adminLogoutButton');
         const adminLoginSection = document.getElementById('adminLoginSection');
@@ -212,26 +277,42 @@
         const noDataMessage = document.getElementById('noDataMessage');
         const adminMessage = document.getElementById('adminMessage');
 
+        // Initial Admin Setup Elements
+        const adminSetupSection = document.getElementById('adminSetupSection');
+        const setupAdminForm = document.getElementById('setupAdminForm');
+        const setupUsernameInput = document.getElementById('setupUsername');
+        const setupPasswordInput = document.getElementById('setupPassword');
+        const confirmSetupPasswordInput = document.getElementById('confirmSetupPassword');
+        const setupError = document.getElementById('setupError');
+
+        // Change Password Elements
+        const changePasswordForm = document.getElementById('changePasswordForm');
+        const currentPasswordInput = document.getElementById('currentPassword');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+        const changePasswordError = document.getElementById('changePasswordError');
+        const changePasswordSuccess = document.getElementById('changePasswordSuccess');
+
         // Message Box Elements
         const messageBoxOverlay = document.getElementById('messageBoxOverlay');
         const messageBox = document.getElementById('messageBox');
         const messageBoxText = document.getElementById('messageBoxText');
         const messageBoxClose = document.getElementById('messageBoxClose');
 
-        // Rasi (Zodiac Signs) in order
+        // Rasi (Zodiac Signs) in order with default emoji images
         const rasiList = [
-            { id: 'mesha', name: 'Mesha (Aries)' },
-            { id: 'vrushabha', name: 'Vrushabha (Taurus)' },
-            { id: 'mithuna', name: 'Mithuna (Gemini)' },
-            { id: 'karkataka', name: 'Karkataka (Cancer)' },
-            { id: 'simha', name: 'Simha (Leo)' },
-            { id: 'kanya', name: 'Kanya (Virgo)' },
-            { id: 'tula', name: 'Tula (Libra)' },
-            { id: 'vrushchika', name: 'Vrushchika (Scorpio)' },
-            { id: 'dhanussu', name: 'Dhanussu (Sagittarius)' },
-            { id: 'makara', name: 'Makara (Capricorn)' },
-            { id: 'kumbha', name: 'Kumbha (Aquarius)' },
-            { id: 'meena', name: 'Meena (Pisces)' }
+            { id: 'mesha', name: 'Mesha (Aries)', defaultImage: '♈' },
+            { id: 'vrushabha', name: 'Vrushabha (Taurus)', defaultImage: '♉' },
+            { id: 'mithuna', name: 'Mithuna (Gemini)', defaultImage: '♊' },
+            { id: 'karkataka', name: 'Karkataka (Cancer)', defaultImage: '♋' },
+            { id: 'simha', name: 'Simha (Leo)', defaultImage: '♌' },
+            { id: 'kanya', name: 'Kanya (Virgo)', defaultImage: '♍' },
+            { id: 'tula', name: 'Tula (Libra)', defaultImage: '♎' },
+            { id: 'vrushchika', name: 'Vrushchika (Scorpio)', defaultImage: '♏' },
+            { id: 'dhanussu', name: 'Dhanussu (Sagittarius)', defaultImage: '♐' },
+            { id: 'makara', name: 'Makara (Capricorn)', defaultImage: '♑' },
+            { id: 'kumbha', name: 'Kumbha (Aquarius)', defaultImage: '♒' },
+            { id: 'meena', name: 'Meena (Pisces)', defaultImage: '♓' }
         ];
 
         // --- Utility Functions ---
@@ -264,7 +345,44 @@
             messageBox.classList.add('hidden');
         }
 
-        // --- Admin Logic ---
+        // Converts a File object to a Base64 string
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // --- Hashing Utility (Client-side, not truly secure) ---
+        async function hashPassword(password) {
+            const textEncoder = new TextEncoder();
+            const data = textEncoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashedPassword;
+        }
+
+        // --- Admin Credential Management ---
+
+        function getAdminCredentials() {
+            try {
+                const credentials = localStorage.getItem('adminCredentials');
+                return credentials ? JSON.parse(credentials) : null;
+            } catch (e) {
+                console.error("Error parsing admin credentials from localStorage:", e);
+                return null;
+            }
+        }
+
+        function setAdminCredentials(username, hashedPassword) {
+            const credentials = { username: username, passwordHash: hashedPassword };
+            localStorage.setItem('adminCredentials', JSON.stringify(credentials));
+        }
+
+        // --- Admin Login/Logout Logic ---
 
         // Check if admin is logged in (based on session storage)
         function isAdminLoggedIn() {
@@ -286,28 +404,75 @@
             if (isAdminLoggedIn()) {
                 adminLoginButton.classList.add('hidden');
                 adminLogoutButton.classList.remove('hidden');
+                homeButton.classList.remove('hidden'); // Ensure home button is visible
                 userView.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
+                adminLoginSection.classList.add('hidden'); // Hide login modal if it was open
+                adminSetupSection.classList.add('hidden'); // Hide setup modal if it was open
+
+                // Load today's data into the admin panel immediately if logged in
+                const today = formatDate(new Date());
+                rasiDateInput.value = today; // Set date input to today
+                loadRasiPhalaluForAdmin(today);
             } else {
                 adminLoginButton.classList.remove('hidden');
                 adminLogoutButton.classList.add('hidden');
+                homeButton.classList.remove('hidden'); // Ensure home button is visible
                 userView.classList.remove('hidden');
                 adminPanel.classList.add('hidden');
                 adminLoginSection.classList.add('hidden'); // Ensure login modal is hidden
+                adminSetupSection.classList.add('hidden'); // Ensure setup modal is hidden
+
+                // Check if admin credentials exist. If not, show setup modal.
+                if (!getAdminCredentials()) {
+                    adminSetupSection.classList.remove('hidden');
+                    userView.classList.add('hidden'); // Hide user view during setup
+                    setupUsernameInput.focus();
+                } else {
+                    displayCurrentRasiPhalalu(); // Refresh user view
+                }
             }
         }
+
+        // --- Admin Panel Functionality ---
 
         // Generate Rasi input fields for admin panel
         function generateRasiInputFields() {
             rasiInputContainer.innerHTML = '';
             rasiList.forEach(rasi => {
                 const div = document.createElement('div');
-                div.classList.add('mb-4');
+                div.classList.add('mb-4', 'flex', 'flex-col', 'items-start'); // Added flex-col and items-start for better alignment
                 div.innerHTML = `
                     <label for="rasi-${rasi.id}" class="admin-form label">${rasi.name}:</label>
+                    <div class="flex items-center space-x-4 mb-2 w-full">
+                        <span id="image-preview-${rasi.id}" class="rasi-image" role="img" aria-label="${rasi.name} symbol">${rasi.defaultImage}</span>
+                        <input type="file" id="image-upload-${rasi.id}" accept="image/*" class="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 flex-grow">
+                    </div>
                     <textarea id="rasi-${rasi.id}" class="admin-form textarea" placeholder="Enter Rasi Phalalu for ${rasi.name}"></textarea>
                 `;
                 rasiInputContainer.appendChild(div);
+
+                // Add event listener for image upload preview
+                const imageUploadInput = document.getElementById(`image-upload-${rasi.id}`);
+                imageUploadInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    const imagePreviewElement = document.getElementById(`image-preview-${rasi.id}`);
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            // If it's an image, set src. If it's an emoji, keep text.
+                            imagePreviewElement.style.backgroundImage = `url(${e.target.result})`;
+                            imagePreviewElement.textContent = ''; // Clear emoji if image loaded
+                            imagePreviewElement.style.backgroundSize = 'cover';
+                            imagePreviewElement.style.backgroundPosition = 'center';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        // Reset to default emoji if no file selected
+                        imagePreviewElement.style.backgroundImage = 'none';
+                        imagePreviewElement.textContent = rasi.defaultImage;
+                    }
+                });
             });
         }
 
@@ -316,8 +481,26 @@
             const data = JSON.parse(localStorage.getItem(`rasiPhalalu_${dateString}`)) || {};
             rasiList.forEach(rasi => {
                 const textarea = document.getElementById(`rasi-${rasi.id}`);
+                const imagePreview = document.getElementById(`image-preview-${rasi.id}`);
+                const imageUploadInput = document.getElementById(`image-upload-${rasi.id}`);
+
                 if (textarea) {
-                    textarea.value = data[rasi.id] || '';
+                    textarea.value = data[rasi.id]?.text || '';
+                }
+                if (imagePreview) {
+                    const savedImage = data[rasi.id]?.image;
+                    if (savedImage && savedImage.startsWith('data:image')) {
+                        imagePreview.style.backgroundImage = `url(${savedImage})`;
+                        imagePreview.textContent = '';
+                        imagePreview.style.backgroundSize = 'cover';
+                        imagePreview.style.backgroundPosition = 'center';
+                    } else {
+                        imagePreview.style.backgroundImage = 'none';
+                        imagePreview.textContent = rasi.defaultImage;
+                    }
+                }
+                if (imageUploadInput) {
+                    imageUploadInput.value = ''; // Clear file input
                 }
             });
             showMessageBox(`Rasi Phalalu loaded for ${formatDisplayDate(dateString)}.`);
@@ -325,7 +508,7 @@
         }
 
         // Save Rasi Phalalu from admin input fields to local storage
-        function saveRasiPhalalu() {
+        async function saveRasiPhalalu() {
             const selectedDate = rasiDateInput.value;
             if (!selectedDate) {
                 showMessageBox('Please select a date before saving.');
@@ -333,18 +516,39 @@
             }
 
             const dataToSave = {};
-            rasiList.forEach(rasi => {
+            for (const rasi of rasiList) {
                 const textarea = document.getElementById(`rasi-${rasi.id}`);
-                if (textarea) {
-                    dataToSave[rasi.id] = textarea.value.trim();
+                const imageUploadInput = document.getElementById(`image-upload-${rasi.id}`);
+                const imagePreviewElement = document.getElementById(`image-preview-${rasi.id}`);
+
+                let imageData = '';
+                // Check if an image is loaded or newly selected
+                if (imageUploadInput.files && imageUploadInput.files[0]) {
+                    // New file selected, convert it
+                    try {
+                        imageData = await fileToBase64(imageUploadInput.files[0]);
+                    } catch (error) {
+                        console.error('Error converting image to Base64:', error);
+                        showMessageBox('Failed to upload image for ' + rasi.name);
+                        return; // Stop saving if image conversion fails
+                    }
+                } else if (imagePreviewElement.style.backgroundImage && imagePreviewElement.style.backgroundImage !== 'none') {
+                    // No new file, but there's a background image (meaning one was previously loaded/saved)
+                    imageData = imagePreviewElement.style.backgroundImage.slice(5, -2); // Extract URL from 'url("...")'
                 }
-            });
+                // If imageData is still empty, it means no custom image was ever set, or it was cleared.
+                // In this case, we don't save the emoji, as that's purely a display fallback.
+
+                dataToSave[rasi.id] = {
+                    text: textarea.value.trim(),
+                    image: imageData
+                };
+            }
 
             localStorage.setItem(`rasiPhalalu_${selectedDate}`, JSON.stringify(dataToSave));
             showMessageBox(`Rasi Phalalu saved successfully for ${formatDisplayDate(selectedDate)}!`);
             adminMessage.textContent = 'Data saved successfully!';
-            adminMessage.classList.remove('hidden');
-            adminMessage.classList.remove('text-red-500');
+            adminMessage.classList.remove('hidden', 'text-red-500');
             adminMessage.classList.add('text-green-500');
 
             // If saving for today's date, refresh the user view
@@ -364,7 +568,7 @@
             const storedData = JSON.parse(localStorage.getItem(`rasiPhalalu_${today}`));
             rasiPhalaluDisplay.innerHTML = ''; // Clear previous content
 
-            if (!storedData || Object.keys(storedData).length === 0 || Object.values(storedData).every(val => val === '')) {
+            if (!storedData || Object.keys(storedData).length === 0 || Object.values(storedData).every(val => !val || (val.text === '' && val.image === ''))) {
                 noDataMessage.classList.remove('hidden');
                 rasiPhalaluDisplay.classList.add('hidden');
             } else {
@@ -372,11 +576,26 @@
                 rasiPhalaluDisplay.classList.remove('hidden');
 
                 rasiList.forEach(rasi => {
-                    const rasiPhal = storedData[rasi.id] || 'No information available for today.';
+                    const rasiInfo = storedData[rasi.id] || {};
+                    const rasiPhal = rasiInfo.text || 'No information available for today.';
+                    const rasiImage = rasiInfo.image || ''; // Get stored image, or empty string if none
+
                     const card = document.createElement('div');
                     card.classList.add('rasi-card');
+
+                    let imageHtml = '';
+                    if (rasiImage && rasiImage.startsWith('data:image')) {
+                        imageHtml = `<img class="rasi-image mr-4" src="${rasiImage}" alt="${rasi.name} Image">`;
+                    } else {
+                        // Fallback to emoji if no custom image or not a data URL
+                        imageHtml = `<span class="rasi-image mr-4" role="img" aria-label="${rasi.name} symbol">${rasi.defaultImage}</span>`;
+                    }
+
                     card.innerHTML = `
-                        <h3>${rasi.name}</h3>
+                        <div class="flex items-center mb-4">
+                            ${imageHtml}
+                            <h3>${rasi.name}</h3>
+                        </div>
                         <p>${rasiPhal}</p>
                     `;
                     rasiPhalaluDisplay.appendChild(card);
@@ -385,6 +604,12 @@
         }
 
         // --- Event Listeners ---
+
+        homeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            setAdminLoggedIn(false); // Ensure admin view is closed
+            displayCurrentRasiPhalalu(); // Refresh user view
+        });
 
         adminLoginButton.addEventListener('click', () => {
             adminLoginSection.classList.remove('hidden');
@@ -404,12 +629,56 @@
             loginError.classList.add('hidden');
         });
 
-        loginForm.addEventListener('submit', (e) => {
+        // Initial Admin Setup Form Submission
+        setupAdminForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const enteredUsername = usernameInput.value;
+            const username = setupUsernameInput.value.trim();
+            const password = setupPasswordInput.value;
+            const confirmPassword = confirmSetupPasswordInput.value;
+
+            setupError.classList.add('hidden');
+            if (password !== confirmPassword) {
+                setupError.textContent = 'Passwords do not match.';
+                setupError.classList.remove('hidden');
+                return;
+            }
+            if (username === '' || password === '') {
+                setupError.textContent = 'Username and password cannot be empty.';
+                setupError.classList.remove('hidden');
+                return;
+            }
+
+            const hashedPassword = await hashPassword(password);
+            setAdminCredentials(username, hashedPassword);
+            showMessageBox('Admin credentials set successfully! You can now log in.');
+            adminSetupSection.classList.add('hidden');
+            updateUIForAdminStatus(); // Re-evaluate UI to show login button
+        });
+
+
+        // Admin Login Form Submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const enteredUsername = usernameInput.value.trim();
             const enteredPassword = passwordInput.value;
 
-            if (enteredUsername === ADMIN_USERNAME && enteredPassword === ADMIN_PASSWORD) {
+            loginError.classList.add('hidden'); // Hide previous errors
+
+            const adminCreds = getAdminCredentials();
+            if (!adminCreds) {
+                loginError.textContent = 'Admin credentials not set. Please set them up first.';
+                loginError.classList.remove('hidden');
+                return;
+            }
+
+            if (enteredUsername !== adminCreds.username) {
+                loginError.textContent = 'Invalid username or password.';
+                loginError.classList.remove('hidden');
+                return;
+            }
+
+            const hashedPassword = await hashPassword(enteredPassword);
+            if (hashedPassword === adminCreds.passwordHash) {
                 setAdminLoggedIn(true);
                 adminLoginSection.classList.add('hidden');
                 showMessageBox('Welcome, Admin!');
@@ -418,6 +687,53 @@
                 loginError.classList.remove('hidden');
             }
         });
+
+        // Change Password Form Submission
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            changePasswordError.classList.add('hidden');
+            changePasswordSuccess.classList.add('hidden');
+
+            const currentPass = currentPasswordInput.value;
+            const newPass = newPasswordInput.value;
+            const confirmNewPass = confirmNewPasswordInput.value;
+
+            if (newPass !== confirmNewPass) {
+                changePasswordError.textContent = 'New passwords do not match.';
+                changePasswordError.classList.remove('hidden');
+                return;
+            }
+            if (newPass.length < 6) { // Basic password strength check
+                changePasswordError.textContent = 'New password must be at least 6 characters long.';
+                changePasswordError.classList.remove('hidden');
+                return;
+            }
+
+            const adminCreds = getAdminCredentials();
+            if (!adminCreds) {
+                changePasswordError.textContent = 'Admin credentials not found. Please log out and set them up.';
+                changePasswordError.classList.remove('hidden');
+                return;
+            }
+
+            const hashedCurrentPass = await hashPassword(currentPass);
+            if (hashedCurrentPass === adminCreds.passwordHash) {
+                const hashedNewPass = await hashPassword(newPass);
+                setAdminCredentials(adminCreds.username, hashedNewPass);
+                changePasswordSuccess.textContent = 'Password changed successfully!';
+                changePasswordSuccess.classList.remove('hidden');
+                currentPasswordInput.value = '';
+                newPasswordInput.value = '';
+                confirmNewPasswordInput.value = '';
+                // Optional: Force logout for security after password change
+                setAdminLoggedIn(false);
+                showMessageBox('Password changed successfully. Please log in with your new password.');
+            } else {
+                changePasswordError.textContent = 'Incorrect current password.';
+                changePasswordError.classList.remove('hidden');
+            }
+        });
+
 
         loadRasiButton.addEventListener('click', () => {
             const selectedDate = rasiDateInput.value;
@@ -428,6 +744,13 @@
             }
         });
 
+        rasiDateInput.addEventListener('change', () => {
+             // If admin is logged in, load data for the newly selected date automatically
+            if (isAdminLoggedIn()) {
+                loadRasiPhalaluForAdmin(rasiDateInput.value);
+            }
+        });
+
         saveRasiButton.addEventListener('click', saveRasiPhalalu);
 
         messageBoxClose.addEventListener('click', hideMessageBox);
@@ -435,18 +758,8 @@
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Set today's date in the admin date input
-            const today = formatDate(new Date());
-            rasiDateInput.value = today;
-
             generateRasiInputFields(); // Create admin input fields on load
-            updateUIForAdminStatus(); // Set initial UI state
-            displayCurrentRasiPhalalu(); // Display horoscopes for today
-            
-            // If admin is logged in, load today's data into the admin panel immediately
-            if (isAdminLoggedIn()) {
-                loadRasiPhalaluForAdmin(today);
-            }
+            updateUIForAdminStatus(); // Set initial UI state and display correct view
         });
     </script>
 </body>
